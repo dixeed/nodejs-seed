@@ -8,8 +8,7 @@ Once the repository cloned, you should remove the _.git_ file created in order n
 1. Start by cloning this repo `git clone`
 2. Remove the .git file `rm -rf .git`
 3. Install the dependencies `npm install`
-4. Generate your private key for the token generation `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"` and then add it to the `config/security/credentials.json` file:
-```JSON
+4. Generate your private key for the token generation `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"` and then add it to the `config/security/credentials.json` file:```JSON
 {
     "jwt": {
         "key": "your-generated-private-key"
@@ -27,12 +26,12 @@ In the `config/database` folder create a file named `credentials.json` and add w
         "database": "my_db",
         "user": "my_user",
         "pass": "my_password",
-        "dialect": "postgres",          // Depending on the database you're targeting (mysql, sqlserver, ...)
+        "dialect": "postgres",
         "host": "localhost",
         "port": 5432
     },
     "prod": {
-        // ...
+    
     }
 }
 ```
