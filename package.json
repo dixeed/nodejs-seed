@@ -1,11 +1,10 @@
 {
     "name": "nodejs-seed",
-    "version": "0.1.0",
-    "private": true,
+    "version": "1.0.0",
     "description": "NodeJS blank startup project",
     "main": "index.js",
     "scripts": {
-        "start": "node index.js",
+        "start": "nodemon index.js",
         "test": "istanbul cover _mocha test/**/*.js"
     },
     "keywords": [
@@ -13,7 +12,7 @@
         "node"
     ],
     "author": "",
-    "license": "UNLICENSED",
+    "license": "MIT",
     "dependencies": {
         "bcrypt": "^0.8.5",
         "boom": "^3.1.2",
@@ -30,6 +29,7 @@
     "devDependencies": {
         "istanbul": "^0.4.2",
         "mocha": "^2.3.4",
+        "nodemon": "^1.9.1",
         "sinon": "^1.17.2"
     }
 }
