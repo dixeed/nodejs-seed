@@ -17,7 +17,7 @@ store = new Confidence.Store({
         syncForce: {
             $filter: 'env',
             prod: false,
-            dev: true
+            dev: false
         },
         credentials: {
             $filter: 'env',
@@ -55,5 +55,5 @@ store = new Confidence.Store({
 // Set a variable to contain the selected environment for NodeJS or default to 'prod'.
 // This keyword will then be used to choose between configurations.
 criteria = {
-    env: process.env.NODE_ENV || 'prod'
+    env: process.env.NODE_ENV || 'dev'
 };
