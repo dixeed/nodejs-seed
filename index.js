@@ -37,7 +37,8 @@ server.register([
             logging: false // should be a function if want to log
         }
     },
-    require('hapi-auth-jwt2')
+    require('hapi-auth-jwt2'),
+    require('./lib/auth-jwt')
     // Add a hapi plugin here by adding a line with require('./lib/my-plugin').
     // If you want to provide options while registering a plugin you need to use the following synthax instead:
     // {
