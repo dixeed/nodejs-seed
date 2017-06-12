@@ -14,22 +14,22 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "bcrypt": "^0.8.5",
-        "boom": "^3.1.2",
-        "confidence": "^1.4.2",
-        "hapi": "^12.1.0",
-        "hapi-auth-jwt2": "^5.3.2",
-        "hapi-sequelize": "^2.2.4",
-        "joi": "^7.2.3",
-        "jsonwebtoken": "^5.5.4",
-        "pg": "^4.5.1",
-        "q": "^1.4.1",
-        "sequelize": "^3.19.0"
+        "bcrypt": "^1.0.2",
+        "boom": "^5.1.0",
+        "confidence": "^3.0.2",
+        "hapi": "^16.4.3",
+        "hapi-auth-jwt2": "^7.2.4",
+        "hapi-sequelize": "^3.0.4",
+        "joi": "^10.5.2",
+        "jsonwebtoken": "^7.4.1",
+        "pg": "^6.2.4",
+        "q": "^1.5.0",
+        "sequelize": "^4.0.0"
     },
     "devDependencies": {
         "istanbul": "^0.4.2",
-        "mocha": "^2.3.4",
+        "mocha": "^3.4.2",
         "nodemon": "^1.9.1",
-        "sinon": "^1.17.2"
+        "sinon": "^2.3.4"
     }
 }

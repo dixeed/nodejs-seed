@@ -19,6 +19,7 @@ store = new Confidence.Store({
             prod: false,
             dev: false
         },
+        name: 'mainDB',
         credentials: {
             $filter: 'env',
             dev: {
