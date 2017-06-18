@@ -40,8 +40,13 @@ server.register([
             forceSync: config.get('/database/syncForce'),
         },
     },
+    {
+        register: require('good'),
+        options: config.get('/good'),
+    },
     require('hapi-auth-jwt2'),
     require('./lib/auth-jwt'),
+    require('./lib/route-test'),
     // Add a hapi plugin here by adding a line with require('./lib/my-plugin').
     // If you want to provide options while registering a plugin you need to use the following synthax instead:
     // {
