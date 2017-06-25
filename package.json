@@ -18,18 +18,18 @@
         "boom": "^5.1.0",
         "confidence": "^3.0.2",
         "hapi": "^16.4.3",
-        "hapi-auth-jwt2": "^7.2.4",
+        "hapi-auth-jwt2": "^7.3.0",
         "hapi-sequelize": "^3.0.4",
-        "joi": "^10.5.2",
+        "joi": "^10.6.0",
         "jsonwebtoken": "^7.4.1",
-        "pg": "^6.2.4",
+        "pg": "^6.4.0",
         "q": "^1.5.0",
-        "sequelize": "^4.0.0"
+        "sequelize": "^3.30.0"
     },
     "devDependencies": {
         "istanbul": "^0.4.2",
         "mocha": "^3.4.2",
         "nodemon": "^1.9.1",
-        "sinon": "^2.3.4"
+        "sinon": "^2.3.5"
     }
 }
