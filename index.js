@@ -11,8 +11,14 @@ module.exports = server;
 /////////////////////////////////////////////////////////////////////////
 
 server.connection({
-    host: config.get('/server/host'),
-    port: config.get('/server/port')
+  host: config.get('/server/host'),
+  port: config.get('/server/port'),
+  routes: {
+    cors: true,
+    files: {
+      relativeTo: __dirname,
+    },
+  },
 });
 
 ////////////////////////////////////////////////////////////////////
