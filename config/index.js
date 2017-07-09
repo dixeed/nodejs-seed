@@ -5,7 +5,11 @@ var dbCredentials = require('./database/credentials');
 var secureCredentials = require('./security/credentials');
 
 var store;
-var criteria;
+// Set a variable to contain the selected environment for NodeJS or default to 'prod'.
+// This keyword will then be used to choose between configurations.
+var criteria = {
+    env: process.env.NODE_ENV || 'dev'
+};
 
 // Wrapper for the Confidence Store --> only the get method is available.
 exports.get = function(key) {
@@ -21,15 +25,12 @@ store = new Confidence.Store({
         },
         name: 'mainDB',
         credentials: {
-            $filter: 'env',
-            dev: {
-                dbName: dbCredentials.dev.database,
-                user: dbCredentials.dev.user,
-                pass: dbCredentials.dev.pass,
-                dialect: dbCredentials.dev.dialect,
-                host: dbCredentials.dev.host,
-                port: dbCredentials.dev.port
-            }
+          dbName: dbCredentials[criteria.env].database,
+          user: dbCredentials[criteria.env].user,
+          pass: dbCredentials[criteria.env].pass,
+          dialect: dbCredentials[criteria.env].dialect,
+          host: dbCredentials[criteria.env].host,
+          port: dbCredentials[criteria.env].port,
         }
     },
 
@@ -50,11 +51,79 @@ store = new Confidence.Store({
             key: secureCredentials.jwt.key,
             algorithm: 'HS512'
         }
-    }
-});
+    },
 
-// Set a variable to contain the selected environment for NodeJS or default to 'prod'.
-// This keyword will then be used to choose between configurations.
-criteria = {
-    env: process.env.NODE_ENV || 'dev'
-};
+    good: {
+        $filter: 'env',
+        dev: {
+          ops: {
+            interval: 1000,
+          },
+          reporters: {
+            consoleReporter: [
+              {
+                module: 'good-squeeze',
+                name: 'Squeeze',
+                args: [{ log: '*', request: '*', response: '*', error: '*' }],
+              },
+              {
+                module: 'good-console',
+              },
+              'stdout'
+            ],
+          },
+        },
+        prod: {
+          ops: {
+            interval: 1000,
+          },
+          reporters: {
+            fileOpsReporter: [
+              {
+                module: 'good-squeeze',
+                name: 'Squeeze',
+                args: [{ ops: '*' }],
+              },
+              {
+                module: 'good-squeeze',
+                name: 'SafeJson',
+              },
+              {
+                module: 'good-file',
+                args: ['./logs/ops.log'],
+              },
+            ],
+            fileLogReporter: [
+              {
+                module: 'good-squeeze',
+                name: 'Squeeze',
+                args: [{ log: '*', request: '*', response: '*' }],
+              },
+              {
+                module: 'good-squeeze',
+                name: 'SafeJson',
+              },
+              {
+                module: 'good-file',
+                args: ['./logs/prod.log'],
+              },
+            ],
+            fileErrorReporter: [
+              {
+                module: 'good-squeeze',
+                name: 'Squeeze',
+                args: [{ error: '*' }],
+              },
+              {
+                module: 'good-squeeze',
+                name: 'SafeJson',
+              },
+              {
+                module: 'good-file',
+                args: ['./logs/error-prod.log'],
+              },
+            ],
+          },
+        },
+    },
+});
