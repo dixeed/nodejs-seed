@@ -4,13 +4,17 @@
   "description": "NodeJS blank startup project",
   "main": "index.js",
   "scripts": {
+    "precommit": "lint-staged",
     "start": "nodemon index.js",
     "test": "istanbul cover _mocha test/**/*.js"
   },
-  "keywords": [
-    "hapi",
-    "node"
-  ],
+  "lint-staged": {
+    "{config,lib,test}/**/*.{js,json}": [
+      "prettier --single-quote --write --print-width 100 --trailing-comma es5",
+      "git add"
+    ]
+  },
+  "keywords": ["hapi", "node"],
   "author": "",
   "license": "MIT",
   "dependencies": {
@@ -31,9 +35,12 @@
     "sequelize": "^3.30.0"
   },
   "devDependencies": {
+    "husky": "^0.14.3",
     "istanbul": "^0.4.2",
+    "lint-staged": "^4.0.1",
     "mocha": "^3.4.2",
     "nodemon": "^1.9.1",
+    "prettier": "^1.5.2",
     "sinon": "^2.3.4"
   }
 }
