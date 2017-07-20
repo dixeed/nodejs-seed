@@ -57,7 +57,7 @@ store = new Confidence.Store({
     $filter: 'env',
     dev: {
       ops: {
-        interval: 10 * 60 * 1000,
+        interval: false,
       },
       reporters: {
         consoleReporter: [
@@ -75,7 +75,7 @@ store = new Confidence.Store({
     },
     prod: {
       ops: {
-        interval: 1000,
+        interval: 10 * 60 * 1000,
       },
       reporters: {
         fileOpsReporter: [
@@ -97,7 +97,7 @@ store = new Confidence.Store({
           {
             module: 'good-squeeze',
             name: 'Squeeze',
-            args: [{ log: '*', request: '*', response: '*' }],
+            args: [{ log: '*', request: { exclude: 'error' }, response: '*' }],
           },
           {
             module: 'good-squeeze',
@@ -112,7 +112,7 @@ store = new Confidence.Store({
           {
             module: 'good-squeeze',
             name: 'Squeeze',
-            args: [{ error: '*' }],
+            args: [{ error: '*', request: 'error' }],
           },
           {
             module: 'good-squeeze',
