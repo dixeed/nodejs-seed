@@ -21,7 +21,7 @@ store = new Confidence.Store({
     syncForce: {
       $filter: 'env',
       prod: false,
-      dev: false,
+      dev: true,
     },
     name: 'mainDB',
     credentials: {
