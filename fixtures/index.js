@@ -17,12 +17,8 @@ module.exports = () =>
        | PGPASSWORD=${password} psql -U ${user} -h ${host} -p ${port} -d ${dbName}
       `,
       (error, stdout, stderr) => {
-        if (stderr) {
-          return reject(stderr);
-        }
-
-        if (error !== null) {
-          return reject(error);
+        if (error !== null || stderr) {
+          return reject({ error, stderr });
         }
 
         return resolve(stdout);

@@ -2,11 +2,21 @@
 
 const Sequelize = require('sequelize');
 const Hapi = require('hapi');
+const chalk = require('chalk');
+const { Line } = require('clui');
+const ora = require('ora');
 
 const config = require('./config');
 const loadFixtures = require('./fixtures');
 
 const server = new Hapi.Server();
+
+// CLI pretty things
+const blankLine = new Line().fill();
+const pluginsSpinner = ora('Loading plugins');
+const modelsSpinner = ora('Models synchronization');
+const fixturesSpinner = ora('Loading fixtures');
+const serverSpinner = ora('Starting server');
 
 module.exports = server;
 
@@ -28,6 +38,9 @@ server.connection({
 //                      Plugins registration                      //
 //                                                                //
 ////////////////////////////////////////////////////////////////////
+blankLine.output();
+pluginsSpinner.start();
+
 server
   .register([
     {
@@ -63,12 +76,22 @@ server
     //     options: { myOpt: 'value' }
     // }
   ])
+  .catch(err => {
+    pluginsSpinner.fail(`Loading plugins: ${err.stack}`);
+    blankLine.output();
+    process.exit(4);
+  })
   /////////////////////////////////////////////////////////////////////////
   //                                                                     //
   //                      Plugins configuration                          //
   //                                                                     //
   /////////////////////////////////////////////////////////////////////////
   .then(() => {
+    pluginsSpinner.succeed();
+
+    blankLine.output();
+    modelsSpinner.start();
+
     const db = server.plugins['hapi-sequelize'][config.get('/database/name')];
 
     // Reload the database when the server is restarted (only in dev mode).
@@ -77,7 +100,8 @@ server
     });
   })
   .catch(function(err) {
-    console.error('Failed to load a plugin: ', err);
+    modelsSpinner.fail(`Models synchronization: ${err.stack}`);
+    blankLine.output();
     process.exit(2);
   })
   ////////////////////////////////////////////////////////////////////
@@ -87,19 +111,33 @@ server
   ////////////////////////////////////////////////////////////////////
   .then(() => {
     // Success callback for the db.sequelize.sync() function call above.
-    console.log('Models synced: [' + 'OK' + ']');
-    console.log('Loading fixtures ...');
+    modelsSpinner.succeed();
+
+    blankLine.output();
+    fixturesSpinner.start();
+
     return loadFixtures();
   })
-  .then(status => {
-    console.log(status);
+  .catch(({ error, stderr }) => {
+    fixturesSpinner.fail(`Loading fixtures: ${stderr}`);
+    process.exit(3);
+  })
+  .then(() => {
+    fixturesSpinner.succeed();
+
+    blankLine.output();
+    serverSpinner.start();
 
     return server.start();
   })
   .then(function() {
-    console.log('Server started on port : [' + config.get('/server/port') + ']');
+    serverSpinner.succeed(
+      chalk`Server started on port : [{yellowBright ${config.get('/server/port')}}]`
+    );
+    blankLine.output();
   })
   .catch(function(err) {
-    console.error('Started server with errors: ' + err);
-    process.exit(3);
+    serverSpinner.fail(`Started server with errors: ${err.stack}`);
+    blankLine.output();
+    process.exit(5);
   });
