@@ -1,20 +1,18 @@
 'use strict';
 
-var Confidence = require('confidence');
-var dbCredentials = require('./database/credentials');
-var secureCredentials = require('./security/credentials');
+const Confidence = require('confidence');
+const dbCredentials = require('./database/credentials');
+const secureCredentials = require('./security/credentials');
 
-var store;
+let store;
 // Set a variable to contain the selected environment for NodeJS or default to 'prod'.
 // This keyword will then be used to choose between configurations.
-var criteria = {
+const criteria = {
   env: process.env.NODE_ENV || 'dev',
 };
 
 // Wrapper for the Confidence Store --> only the get method is available.
-exports.get = function(key) {
-  return store.get(key, criteria);
-};
+exports.get = key => store.get(key, criteria);
 
 store = new Confidence.Store({
   database: {

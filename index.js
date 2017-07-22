@@ -99,7 +99,7 @@ server
       force: config.get('/database/syncForce'),
     });
   })
-  .catch(function(err) {
+  .catch(err => {
     modelsSpinner.fail(`Models synchronization: ${err.stack}`);
     blankLine.output();
     process.exit(2);
@@ -130,13 +130,13 @@ server
 
     return server.start();
   })
-  .then(function() {
+  .then(() => {
     serverSpinner.succeed(
       chalk`Server started on port : [{yellowBright ${config.get('/server/port')}}]`
     );
     blankLine.output();
   })
-  .catch(function(err) {
+  .catch(err => {
     serverSpinner.fail(`Started server with errors: ${err.stack}`);
     blankLine.output();
     process.exit(5);
