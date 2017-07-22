@@ -20,7 +20,7 @@ const serverSpinner = ora('Starting server');
 
 module.exports = server;
 
-/////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////
 
 server.connection({
   host: config.get('/server/host'),
@@ -28,16 +28,16 @@ server.connection({
   routes: {
     cors: true,
     files: {
-      relativeTo: __dirname,
-    },
-  },
+      relativeTo: __dirname
+    }
+  }
 });
 
-////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////
 //                                                                //
 //                      Plugins registration                      //
 //                                                                //
-////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////
 blankLine.output();
 pluginsSpinner.start();
 
@@ -54,21 +54,21 @@ server
           {
             dialect: config.get('/database/credentials/dialect'),
             host: config.get('/database/credentials/host'),
-            port: config.get('/database/credentials/port'),
+            port: config.get('/database/credentials/port')
           }
         ),
 
         models: ['lib/**/model.js', 'lib/**/models/*.js'],
-        forceSync: config.get('/database/syncForce'),
-      },
+        forceSync: config.get('/database/syncForce')
+      }
     },
     {
       register: require('good'),
-      options: config.get('/good'),
+      options: config.get('/good')
     },
     require('hapi-auth-jwt2'),
     require('./lib/auth-jwt'),
-    require('./lib/route-test'),
+    require('./lib/route-test')
     // Add a hapi plugin here by adding a line with require('./lib/my-plugin').
     // If you want to provide options while registering a plugin you need to use the following synthax instead:
     // {
@@ -81,11 +81,11 @@ server
     blankLine.output();
     process.exit(4);
   })
-  /////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////
   //                                                                     //
   //                      Plugins configuration                          //
   //                                                                     //
-  /////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////
   .then(() => {
     pluginsSpinner.succeed();
 
@@ -96,7 +96,7 @@ server
 
     // Reload the database when the server is restarted (only in dev mode).
     return db.sequelize.sync({
-      force: config.get('/database/syncForce'),
+      force: config.get('/database/syncForce')
     });
   })
   .catch(err => {
@@ -104,11 +104,11 @@ server
     blankLine.output();
     process.exit(2);
   })
-  ////////////////////////////////////////////////////////////////////
+  // //////////////////////////////////////////////////////////////////
   //                                                                //
   //                      Start the server                          //
   //                                                                //
-  ////////////////////////////////////////////////////////////////////
+  // //////////////////////////////////////////////////////////////////
   .then(() => {
     // Success callback for the db.sequelize.sync() function call above.
     modelsSpinner.succeed();
