@@ -1,6 +1,6 @@
 'use strict';
 
-/* eslint-disable no-process-env */
+/* eslint-disable no-process-env, global-require */
 
 const Confidence = require('confidence');
 const dbCredentials = require('./database/credentials');
@@ -16,6 +16,9 @@ const criteria = { env: process.env.NODE_ENV || 'dev' };
 exports.get = key => store.get(key, criteria);
 
 store = new Confidence.Store({
+  publicFolder: 'public/',
+  publicImgFolder: 'public/images',
+
   database: {
     syncForce: {
       $filter: 'env',
@@ -33,6 +36,8 @@ store = new Confidence.Store({
     },
   },
 
+  mailer: { transporter: require('./mailer/transporter') },
+
   // Edit this setting with the environment variable real name.
   server: {
     host: process.env.MY_PROJECT_HOST || 'localhost',
@@ -49,7 +54,16 @@ store = new Confidence.Store({
     jwt: {
       key: secureCredentials.jwt.key,
       algorithm: 'HS512',
+      cookieOptions: {
+        ttl: 1000 * 60 * 60 * 24 * 2, // valid for 2 days
+        isSecure: true,
+        isHttpOnly: true,
+        encoding: 'none',
+        clearInvalid: false,
+        strictHeader: true,
+      },
     },
+    hash: { algorithm: 'SHA512' },
   },
 
   good: {
@@ -76,7 +90,7 @@ store = new Confidence.Store({
       },
     },
     prod: {
-      ops: { interval: 10 * 60 * 1000 }, // eslint-disable-line no-magic-numbers
+      ops: { interval: 10 * 60 * 1000 },
       reporters: {
         fileOpsReporter: [
           {

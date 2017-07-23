@@ -1,0 +1,9 @@
+{
+  "port": 587,
+  "host": "ex2.mail.ovh.net",
+  "secure": false,
+  "auth": {
+    "user": "email",
+    "pass": "password"
+  }
+}
