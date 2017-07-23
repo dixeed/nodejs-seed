@@ -79,7 +79,7 @@ module.exports = {
     'no-labels': 'error',
     'no-lone-blocks': 'error',
     'no-loop-func': 'error',
-    'no-magic-numbers': 'error',
+    'no-magic-numbers': 'warn',
     'no-multi-spaces': 'error',
     'no-multi-str': 'error',
     // 'no-new': 'error',
@@ -154,7 +154,7 @@ module.exports = {
     'block-spacing': 'error',
     'brace-style': 'error',
     camelcase: 'error',
-    'capitalized-comments': 'error',
+    // 'capitalized-comments': 'error',
     'comma-dangle': [
       'error',
       {
