@@ -13,7 +13,7 @@
     "test": "istanbul cover _mocha test/**/*.js"
   },
   "lint-staged": {
-    "{config,lib,test}/**/*.{js,json}": [
+    "{config,lib,test,utils}/**/*.{js,json}": [
       "prettier-eslint --single-quote --write --print-width 100 --trailing-comma es5",
       "git add"
     ]
