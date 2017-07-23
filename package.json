@@ -44,8 +44,6 @@
   },
   "devDependencies": {
     "eslint": "^4.3.0",
-    "eslint-config-google": "^0.9.1",
-    "eslint-config-prettier": "^2.3.0",
     "husky": "^0.14.3",
     "istanbul": "^0.4.2",
     "lint-staged": "^4.0.1",

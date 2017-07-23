@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint-disable global-require, no-process-exit */
+
 const Sequelize = require('sequelize');
 const Hapi = require('hapi');
 const chalk = require('chalk');
@@ -8,6 +10,10 @@ const ora = require('ora');
 
 const config = require('./config');
 const loadFixtures = require('./fixtures');
+const MODELS_SYNC_ERROR = 2;
+const LOADING_FIXTURES_ERROR = 3;
+const LOADING_PLUGINS_ERROR = 4;
+const GLOBAL_ERROR = 5;
 
 const server = new Hapi.Server();
 
@@ -27,10 +33,8 @@ server.connection({
   port: config.get('/server/port'),
   routes: {
     cors: true,
-    files: {
-      relativeTo: __dirname
-    }
-  }
+    files: { relativeTo: __dirname },
+  },
 });
 
 // //////////////////////////////////////////////////////////////////
@@ -54,32 +58,32 @@ server
           {
             dialect: config.get('/database/credentials/dialect'),
             host: config.get('/database/credentials/host'),
-            port: config.get('/database/credentials/port')
+            port: config.get('/database/credentials/port'),
           }
         ),
 
         models: ['lib/**/model.js', 'lib/**/models/*.js'],
-        forceSync: config.get('/database/syncForce')
-      }
+        forceSync: config.get('/database/syncForce'),
+      },
     },
     {
       register: require('good'),
-      options: config.get('/good')
+      options: config.get('/good'),
     },
     require('hapi-auth-jwt2'),
     require('./lib/auth-jwt'),
-    require('./lib/route-test')
+    require('./lib/route-test'),
     // Add a hapi plugin here by adding a line with require('./lib/my-plugin').
     // If you want to provide options while registering a plugin you need to use the following synthax instead:
     // {
-    //     register: require('./lib/my-plugin'),
-    //     options: { myOpt: 'value' }
+    //     Register: require('./lib/my-plugin'),
+    //     Options: { myOpt: 'value' }
     // }
   ])
   .catch(err => {
     pluginsSpinner.fail(`Loading plugins: ${err.stack}`);
     blankLine.output();
-    process.exit(4);
+    process.exit(LOADING_PLUGINS_ERROR);
   })
   // ///////////////////////////////////////////////////////////////////////
   //                                                                     //
@@ -95,14 +99,12 @@ server
     const db = server.plugins['hapi-sequelize'][config.get('/database/name')];
 
     // Reload the database when the server is restarted (only in dev mode).
-    return db.sequelize.sync({
-      force: config.get('/database/syncForce')
-    });
+    return db.sequelize.sync({ force: config.get('/database/syncForce') });
   })
   .catch(err => {
     modelsSpinner.fail(`Models synchronization: ${err.stack}`);
     blankLine.output();
-    process.exit(2);
+    process.exit(MODELS_SYNC_ERROR);
   })
   // //////////////////////////////////////////////////////////////////
   //                                                                //
@@ -118,9 +120,9 @@ server
 
     return loadFixtures();
   })
-  .catch(({ error, stderr }) => {
+  .catch(({ stderr }) => {
     fixturesSpinner.fail(`Loading fixtures: ${stderr}`);
-    process.exit(3);
+    process.exit(LOADING_FIXTURES_ERROR);
   })
   .then(() => {
     fixturesSpinner.succeed();
@@ -139,5 +141,5 @@ server
   .catch(err => {
     serverSpinner.fail(`Started server with errors: ${err.stack}`);
     blankLine.output();
-    process.exit(5);
+    process.exit(GLOBAL_ERROR);
   });

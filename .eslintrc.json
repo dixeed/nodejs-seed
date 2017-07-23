@@ -1,8 +1,0 @@
-{
-  "extends": ["eslint:recommended", "google", "prettier"],
-  "env": {
-    "node": true,
-    "commonjs": true,
-    "es6": true
-  }
-}

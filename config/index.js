@@ -1,15 +1,16 @@
 'use strict';
 
+/* eslint-disable no-process-env */
+
 const Confidence = require('confidence');
 const dbCredentials = require('./database/credentials');
 const secureCredentials = require('./security/credentials');
 
-let store;
+const DEFAULT_PORT = 8890;
+let store = null;
 // Set a variable to contain the selected environment for NodeJS or default to 'prod'.
 // This keyword will then be used to choose between configurations.
-const criteria = {
-  env: process.env.NODE_ENV || 'dev',
-};
+const criteria = { env: process.env.NODE_ENV || 'dev' };
 
 // Wrapper for the Confidence Store --> only the get method is available.
 exports.get = key => store.get(key, criteria);
@@ -35,7 +36,7 @@ store = new Confidence.Store({
   // Edit this setting with the environment variable real name.
   server: {
     host: process.env.MY_PROJECT_HOST || 'localhost',
-    port: process.env.MY_PROJECT_PORT || 8890,
+    port: process.env.MY_PROJECT_PORT || DEFAULT_PORT,
   },
 
   security: {
@@ -54,27 +55,28 @@ store = new Confidence.Store({
   good: {
     $filter: 'env',
     dev: {
-      ops: {
-        interval: false,
-      },
+      ops: { interval: false },
       reporters: {
         consoleReporter: [
           {
             module: 'good-squeeze',
             name: 'Squeeze',
-            args: [{ log: '*', request: '*', response: '*', error: '*' }],
+            args: [
+              {
+                log: '*',
+                request: '*',
+                response: '*',
+                error: '*',
+              },
+            ],
           },
-          {
-            module: 'good-console',
-          },
+          { module: 'good-console' },
           'stdout',
         ],
       },
     },
     prod: {
-      ops: {
-        interval: 10 * 60 * 1000,
-      },
+      ops: { interval: 10 * 60 * 1000 }, // eslint-disable-line no-magic-numbers
       reporters: {
         fileOpsReporter: [
           {
@@ -95,7 +97,13 @@ store = new Confidence.Store({
           {
             module: 'good-squeeze',
             name: 'Squeeze',
-            args: [{ log: '*', request: { exclude: 'error' }, response: '*' }],
+            args: [
+              {
+                log: '*',
+                request: { exclude: 'error' },
+                response: '*',
+              },
+            ],
           },
           {
             module: 'good-squeeze',
@@ -110,7 +118,12 @@ store = new Confidence.Store({
           {
             module: 'good-squeeze',
             name: 'Squeeze',
-            args: [{ error: '*', request: 'error' }],
+            args: [
+              {
+                error: '*',
+                request: 'error',
+              },
+            ],
           },
           {
             module: 'good-squeeze',
