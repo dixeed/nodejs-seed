@@ -73,6 +73,7 @@ server
       register: require('good'),
       options: config.get('/good'),
     },
+    require('inert'),
     require('hapi-auth-jwt2'),
     require('./lib/auth-jwt'),
     require('./lib/route-test'),
