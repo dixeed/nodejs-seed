@@ -9,7 +9,7 @@
   },
   "scripts": {
     "precommit": "lint-staged",
-    "start": "nodemon index.js",
+    "start": "nodemon -e js,json,sql index.js",
     "test": "istanbul cover _mocha test/**/*.js"
   },
   "lint-staged": {
