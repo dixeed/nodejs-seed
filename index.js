@@ -11,6 +11,7 @@ const { Line } = require('clui');
 const ora = require('ora');
 
 const config = require('./config');
+config.init(process.argv);
 const loadFixtures = require('./fixtures');
 const MODELS_SYNC_ERROR = 2;
 const LOADING_FIXTURES_ERROR = 3;
@@ -120,14 +121,22 @@ server
     blankLine.output();
     fixturesSpinner.start();
 
-    return loadFixtures();
+    if (config.get('/database/syncForce') === true) {
+      return loadFixtures();
+    }
+
+    return null;
   })
   .catch(({ stderr }) => {
     fixturesSpinner.fail(`Loading fixtures: ${stderr}`);
     process.exit(LOADING_FIXTURES_ERROR);
   })
   .then(() => {
-    fixturesSpinner.succeed();
+    if (config.get('/database/syncForce') === true) {
+      fixturesSpinner.succeed();
+    } else {
+      fixturesSpinner.warn();
+    }
 
     blankLine.output();
     serverSpinner.start();
