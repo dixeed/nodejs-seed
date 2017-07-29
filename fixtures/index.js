@@ -14,6 +14,7 @@ module.exports = () =>
   Q.Promise((resolve, reject) => {
     exec(
       `cat ./fixtures/test/postgres.sql \
+           ./fixtures/user/postgres.sql \
        | PGPASSWORD=${password} psql -U ${user} -h ${host} -p ${port} -d ${dbName}
       `,
       (error, stdout, stderr) => {
