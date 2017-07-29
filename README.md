@@ -1,5 +1,7 @@
 # Node.js Seed Project
 
+[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+
 This is a blank startup project for Node.js using JWT authentication token.
 
 Once the repository cloned, you should remove the _.git_ file created in order not to fork this repository and start your own one.
