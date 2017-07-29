@@ -10,7 +10,8 @@
   "scripts": {
     "precommit": "lint-staged",
     "start": "nodemon -e js,json,sql index.js",
-    "test": "istanbul cover _mocha test/**/*.js"
+    "test": "istanbul cover _mocha test/**/*.js",
+    "debug": "node --inspect index.js"
   },
   "lint-staged": {
     "{config,lib,test,utils}/**/*.{js,json}": [
